@@ -1,6 +1,6 @@
 from argparse import ArgumentParser
 from configparser import ConfigParser
-from cmds import config, get
+from cmds import config, get, submit
 
 
 
@@ -14,6 +14,8 @@ def create_parser() -> (ArgumentParser, ConfigParser):
     conf = config.init_config("insert token here", "insert working directory here")
 
     get.add_get_parser(subparser)
+    submit.add_submit_parser(subparser)
+
     
 
     return (parser, conf)
