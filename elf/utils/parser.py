@@ -1,16 +1,17 @@
 from argparse import ArgumentParser
+from configparser import ConfigParser
 from cmds import config
 
 
 
-def create_parser() -> ArgumentParser:
+def create_parser() -> (ArgumentParser, ConfigParser):
     parser = ArgumentParser('elf')
     #parser.description('A happy christmas elf ready to help you interact with Advent of Code!')
     
     # Add different parsers
     config.add_config_parser(parser)
-    config.init_config("test", "test")
+    conf = config.init_config("insert token here", "insert working directory here")
 
-    return parser
+    return (parser, conf)
 
 

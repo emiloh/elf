@@ -1,5 +1,5 @@
 from configparser import ConfigParser
-from argparse import ArgumentParser
+from argparse import ArgumentParser, Namespace
 from pathlib import Path
 import os
 
@@ -8,7 +8,7 @@ HOME_DIR = Path.home()
 CONFIG_FILE_PATH = HOME_DIR / '.aoc' / 'config.ini'
 DEFAULT_YEAR = 2015
 
-def init_config(token: str, workdir: Path, year: int = 2015) -> ConfigParser:
+def init_config(token: str, workdir: Path, year: int = DEFAULT_YEAR) -> ConfigParser:
     config = ConfigParser()
 
     if not CONFIG_FILE_PATH.parent.exists():
@@ -23,17 +23,26 @@ def init_config(token: str, workdir: Path, year: int = 2015) -> ConfigParser:
     
     with open(CONFIG_FILE_PATH, "w+") as confingfile:
         config.write(confingfile)
+        confingfile.close()
 
 def add_config_parser(parser: ArgumentParser):
-    subparser = parser.add_subparsers()
+    subparser = parser.add_subparsers(dest='command')
     config_parser = subparser.add_parser('config', description="Modify your config file")
-    config_parser.add_argument('--token', '-t', help='Your session token', nargs=1)
-    config_parser.add_argument('--workdir', '-wd', help="Your working directory for advent of code solutions",
-                               nargs=1)
-    config_parser.add_argument('--year', '-y', help='Year you are currently working on. Default is 2015', 
-                               nargs=1, default=DEFAULT_YEAR)
+    config_parser.add_argument('--token', '-t', help='Your session token')
+    config_parser.add_argument('--workdir', '-wd', help="Your working directory for advent of code solutions")
+    config_parser.add_argument('--year', '-y', help='Year you are currently working on. Default is 2015')
+    config_parser.set_defaults(func=update_config)
 
 
-def update_config():
-    pass
+def update_config(ns: Namespace, config: ConfigParser):
+    if ns.token is not None:
+        config.set('aoc', 'token', ns.token)    
+    if ns.workdir is not None:
+        config.set('general', 'workdir', ns.workdir) 
+    if ns.year is not None:
+        config.set('general', 'year', ns.year) 
+    
+    with open(CONFIG_FILE_PATH, "w+") as confingfile:
+        config.write(confingfile)
+        confingfile.close()
     

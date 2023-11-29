@@ -1,9 +1,14 @@
 from utils import parser
 
+
 def cli():
-    p = parser.create_parser()
+    (p, conf) = parser.create_parser()
 
     args = p.parse_args()
+
+    if args.command is not None:
+        args.func(args, conf)
+
     
 
 if __name__ == "__main__":
