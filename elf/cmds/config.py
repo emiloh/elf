@@ -25,14 +25,12 @@ def init_config(token: str, workdir: Path, year: int = DEFAULT_YEAR) -> ConfigPa
         config.write(confingfile)
         confingfile.close()
 
-def add_config_parser(parser: ArgumentParser):
-    subparser = parser.add_subparsers(dest='command')
+def add_config_parser(subparser: ArgumentParser):
     config_parser = subparser.add_parser('config', description="Modify your config file")
     config_parser.add_argument('--token', '-t', help='Your session token')
     config_parser.add_argument('--workdir', '-wd', help="Your working directory for advent of code solutions")
     config_parser.add_argument('--year', '-y', help='Year you are currently working on. Default is 2015')
     config_parser.set_defaults(func=update_config)
-
 
 def update_config(ns: Namespace, config: ConfigParser):
     if ns.token is not None:
