@@ -9,7 +9,6 @@ def submit_solution(ns: Namespace, config: ConfigParser):
     part = 2 if ns.p2 else 1
     year = config['general']['year'] if ns.year is None else ns.year
     path_to_solution = Path(config.get('general', 'workdir')) / '.solution' / year / f'sol_p{part}_day{int(ns.day):02}.txt'
-    print(str(path_to_solution))
 
     if not path_to_solution.exists():
         print('Answer not found. Try running the "run" command')
